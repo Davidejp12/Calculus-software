@@ -1,0 +1,198 @@
+@font-face { font-family: "Atkinson"; src: url(../vendor/font/atkinson-hyperlegible-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Atkinson"; src: url(../vendor/font/atkinson-hyperlegible-latin-700-normal.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Atkinson"; src: url(../vendor/font/atkinson-hyperlegible-latin-400-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+
+/* Quaderno a quadretti: penna blu, penna rossa, matita, evidenziatore. Sempre chiaro, anche col Mac in modalità scura. */
+:root { color-scheme: light; }
+:root {
+  --carta: #fcfdff;
+  --quadretto: #dbe5f1;
+  --margine: #e9a3a3;
+  --penna: #1f3a93;
+  --rosso: #c62828;
+  --verde: #2e7d32;
+  --matita: #34383f;
+  --matita-2: #686e78;
+  --evidenziatore: rgba(255, 233, 77, .65);
+  --quadro: 20px;
+
+  /* nomi usati dal grafico */
+  --f: var(--penna); --f1: var(--rosso); --f2: var(--matita-2);
+  --max: var(--rosso); --min: var(--rosso); --flex: var(--verde); --nd: var(--matita);
+  --asintoto: var(--matita-2); --griglia: var(--quadretto); --assi: var(--matita-2);
+  --inchiostro: var(--matita); --inchiostro-2: var(--matita-2); --accento: var(--penna);
+  --sans: "Atkinson", "Segoe UI", system-ui, sans-serif; --mono: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  color: var(--matita);
+  font: 17px/1.6 var(--sans);
+  background-color: var(--carta);
+  background-image:
+    linear-gradient(var(--quadretto) 1px, transparent 1px),
+    linear-gradient(90deg, var(--quadretto) 1px, transparent 1px);
+  background-size: var(--quadro) var(--quadro);
+}
+a { color: var(--penna); }
+:focus-visible { outline: 2px solid var(--penna); outline-offset: 2px; }
+
+/* ---------- foglio: margine rosso a sinistra, studio al centro, grafico a destra */
+.foglio {
+  max-width: 1320px; margin: 0 auto; padding: 28px 24px 96px 0;
+  display: grid; grid-template-columns: 72px minmax(0, 1fr) minmax(360px, 520px);
+  grid-template-areas: "testa testa testa" ". funzione grafico" ". studio grafico";
+  grid-template-rows: auto auto 1fr;
+  column-gap: 32px;
+}
+.foglio::before {
+  content: ""; grid-column: 1; grid-row: 1 / 4; justify-self: end;
+  width: 2px; background: var(--margine); margin-right: 8px;
+}
+@media (max-width: 1000px) {
+  .foglio { grid-template-columns: 48px minmax(0, 1fr); grid-template-areas: "testa testa" ". funzione" ". grafico" ". studio"; grid-template-rows: auto; column-gap: 16px; padding-right: 16px; }
+  .foglio::before { grid-row: 1 / 5; }
+}
+@media (max-width: 560px) {
+  .foglio { grid-template-columns: 0 minmax(0, 1fr); column-gap: 16px; }
+  .foglio::before { display: none; }
+}
+
+.testa { grid-area: testa; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; padding-left: 104px; margin-bottom: 20px; }
+@media (max-width: 1000px) { .testa { padding-left: 64px; } }
+@media (max-width: 560px) { .testa { padding-left: 16px; } }
+.testa h1 { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--penna); }
+.testa p { margin: 0; color: var(--matita-2); font-size: .95rem; }
+
+/* ---------- la funzione */
+.funzione { grid-area: funzione; min-width: 0; }
+.riga-f { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.riga-f .fx { font-size: 2rem; color: var(--penna); white-space: nowrap; }
+#f {
+  flex: 1; min-width: 200px; font: 400 2rem/1.3 var(--sans); color: var(--penna);
+  background: transparent; border: 0; border-bottom: 2px solid var(--penna); padding: 2px 4px; border-radius: 0;
+}
+#f::placeholder { color: var(--matita-2); opacity: .55; }
+#f:focus { outline: none; border-bottom-width: 3px; }
+button {
+  font: 700 1rem var(--sans); cursor: pointer; color: var(--carta); background: var(--penna);
+  border: 0; border-radius: 4px; padding: 10px 20px;
+}
+button:hover { filter: brightness(1.12); }
+button:disabled { opacity: .55; cursor: wait; }
+.scritta {
+  min-height: 3.6rem; margin: 10px 0 4px; font-size: 1.55rem; color: var(--penna);
+  overflow-x: auto; overflow-y: hidden;
+}
+.scritta .katex-display { margin: 0 !important; text-align: left; }
+.scritta .katex-display > .katex { text-align: left; }
+.opzioni { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: baseline; color: var(--matita-2); font-size: .95rem; }
+.esempi button {
+  background: none; color: var(--penna); padding: 0 2px; font-weight: 400; font-size: .95rem;
+  text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--penna) 35%, transparent); text-underline-offset: 3px;
+}
+.esempi button:hover { text-decoration-color: var(--penna); filter: none; }
+.intervallo input, .verifica input {
+  font: 1rem var(--sans); color: var(--matita); background: var(--carta);
+  border: 1px solid var(--quadretto); border-bottom: 1.5px solid var(--matita-2); border-radius: 2px; padding: 3px 8px;
+}
+.intervallo input { width: 4.6rem; }
+details.aiuto { margin-top: 14px; font-size: .95rem; color: var(--matita-2); }
+details.aiuto summary { cursor: pointer; color: var(--penna); width: max-content; }
+details.aiuto table { margin-top: 8px; border-collapse: collapse; }
+details.aiuto td { padding: 4px 16px 4px 0; vertical-align: top; }
+details.aiuto code { font: inherit; color: var(--penna); background: var(--carta); padding: 0 4px; }
+
+.errore { color: var(--rosso); margin: 16px 0 0; font-weight: 700; }
+.attesa { color: var(--matita-2); font-style: italic; margin: 16px 0 0; }
+
+/* ---------- passaggi dello studio (numerati: è la sequenza della verifica) */
+.studio { grid-area: studio; margin-top: 32px; counter-reset: passo; min-width: 0; }
+.passo { position: relative; padding: 4px 0 28px; counter-increment: passo; }
+.passo::before {
+  content: counter(passo); position: absolute; left: -82px; top: 0; width: 44px; text-align: right;
+  font: 700 1.9rem/1 var(--sans); color: var(--rosso);
+}
+@media (max-width: 1000px) { .passo::before { left: -58px; width: 34px; font-size: 1.5rem; } }
+@media (max-width: 560px) { .passo::before { position: static; display: inline; margin-right: 10px; } }
+.passo h2 { display: inline; font-size: 1.3rem; font-weight: 700; margin: 0; color: var(--matita); }
+.passo > .corpo { margin-top: 8px; }
+.formula { font-size: 1.2rem; overflow-x: auto; overflow-y: hidden; padding: 2px 0; color: var(--penna); }
+.secondaria { color: var(--matita-2); font-size: .95rem; }
+.secondaria .katex { color: var(--matita-2); }
+p { margin: 6px 0; max-width: 72ch; }
+.corpo p .katex { color: var(--penna); }
+
+.verifica { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; font-size: .95rem; color: var(--matita-2); }
+.verifica input { flex: 1; min-width: 180px; max-width: 360px; }
+.verifica button { padding: 4px 12px; font-size: .9rem; background: none; color: var(--penna); border: 1.5px solid var(--penna); }
+.esito { width: 100%; font-weight: 700; }
+.esito.si { color: var(--verde); }
+.esito.no { color: var(--rosso); }
+
+/* evidenziatore: il tratto giallo dietro ai punti stazionari */
+.evid {
+  background: linear-gradient(100deg, transparent 2%, var(--evidenziatore) 4%, var(--evidenziatore) 96%, transparent 98%);
+  padding: 2px 6px; margin: 0 -2px; border-radius: 3px 8px 4px 10px;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.stazionari { list-style: none; padding: 0; margin: 10px 0 0; }
+.stazionari li { padding: 6px 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.natura { font-weight: 700; }
+.natura.max, .natura.min { color: var(--rosso); }
+.natura.flex { color: var(--verde); }
+.natura.staz, .natura.nd { color: var(--matita-2); }
+.perche { color: var(--matita-2); font-size: .93rem; }
+.cliccabile { cursor: pointer; }
+.cliccabile:hover .evid, .cliccabile:hover .x-val { text-decoration: underline; text-decoration-color: var(--matita-2); }
+
+/* ---------- schema dei segni, come sul quaderno: continua = +, tratteggiata = − */
+.schema-box { overflow-x: auto; margin: 14px 0 8px; padding: 4px 0; }
+.schema { display: grid; align-items: center; min-width: max-content; row-gap: 2px; }
+.schema .nome { padding-right: 14px; white-space: nowrap; }
+.schema .cella { text-align: center; min-height: 2.3rem; display: flex; align-items: center; justify-content: center; position: relative; }
+.schema .pt { padding: 0 6px; min-width: 2.2rem; }
+.schema .pt.riga-x .katex { color: var(--penna); }
+.schema .pt.riga-s { font-weight: 700; }
+.schema .pt.fuori::after { content: ""; position: absolute; top: -2px; bottom: -2px; left: 50%; width: 6px; transform: translateX(-50%); border-left: 1.5px solid var(--matita); border-right: 1.5px solid var(--matita); }
+.schema .tratto { width: 100%; height: 0; border-top: 2px solid var(--matita); position: relative; }
+.schema .tratto.meno { border-top-style: dashed; }
+.schema .tratto span { position: absolute; left: 50%; top: -1.6rem; transform: translateX(-50%); font-weight: 700; }
+.schema .tratto.piu span { color: var(--verde); }
+.schema .tratto.meno span { color: var(--rosso); }
+.schema .int { min-width: 4.5rem; padding: 0 4px; }
+.schema .riga-s.int { padding-top: 1.2rem; }
+.schema .freccia { font-size: 1.4rem; color: var(--penna); line-height: 1; }
+.schema .etich { font-size: .85rem; font-weight: 700; color: var(--rosso); }
+.schema .etich.flesso { color: var(--verde); }
+.schema .buco { align-self: stretch; min-width: 2.4rem; background: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--matita-2) 35%, transparent) 5px 6px); }
+
+/* ---------- grafico: resta fermo mentre scorri lo studio */
+.grafico-col { grid-area: grafico; min-width: 0; }
+.grafico-fisso { position: sticky; top: 20px; }
+.area-grafico { position: relative; }
+canvas.grafico {
+  width: 100%; height: min(72vh, 560px); display: block; touch-action: none; cursor: grab;
+  background: var(--carta); border: 1.5px solid var(--matita-2); border-radius: 2px;
+}
+@media (max-width: 1000px) { canvas.grafico { height: 380px; } .grafico-fisso { position: static; } .grafico-col { margin-top: 24px; } }
+canvas.grafico:active { cursor: grabbing; }
+.coordinate { position: absolute; left: 8px; bottom: 6px; font-size: .8rem; color: var(--matita-2); background: var(--carta); padding: 0 6px; pointer-events: none; font-variant-numeric: tabular-nums; }
+.zoom { position: absolute; right: 8px; top: 8px; display: flex; gap: 4px; }
+.zoom button { padding: 0; width: 30px; height: 30px; font-size: 1.05rem; background: var(--carta); color: var(--matita); border: 1px solid var(--matita-2); }
+.mostra { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 10px; font-size: .93rem; }
+.mostra label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
+.mostra input { accent-color: var(--penna); }
+.campione { display: inline-block; width: 22px; height: 0; border-top: 2.5px solid; }
+.campione.tratt { border-top-style: dashed; }
+.legenda { margin-top: 8px; font-size: .88rem; color: var(--matita-2); }
+.legenda b { color: var(--rosso); }
+.legenda b.v { color: var(--verde); }
+.legenda .evid { color: var(--matita); }
+
+.nota { color: var(--matita-2); font-size: .93rem; border-left: 2px solid var(--matita-2); padding-left: 12px; margin: 8px 0; }
+.nascosto { display: none !important; }
+.corpo .katex-display { margin: 4px 0 !important; text-align: left; }
+.corpo .katex-display > .katex { text-align: left; }
+.schema .pt.riga-s, .coordinate { font-family: var(--mono); }

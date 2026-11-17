@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio di funzione</title>
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="vendor/katex/katex.min.js"></script>
+<script src="js/comune.js"></script>
+<script src="js/grafico.js"></script>
+</head>
+<body>
+<div class="foglio">
+  <header class="testa">
+    <h1>Studio di funzione</h1>
+    <p>Scrivi la funzione: lo studio viene svolto passo per passo, nell'ordine della verifica.</p>
+  </header>
+
+  <section class="funzione">
+    <form id="modulo" class="riga-f" autocomplete="off">
+      <label for="f" class="fx"><span class="m">f(x) =</span></label>
+      <input type="text" id="f" placeholder="x^3 - 3x" spellcheck="false" autofocus>
+      <button type="submit" id="vai">Studia</button>
+    </form>
+    <div class="scritta" id="scritta"></div>
+    <div class="opzioni">
+      <span class="esempi" id="esempi">Esempi: </span>
+      <span class="intervallo">Solo nell'intervallo
+        [<input type="text" id="a" aria-label="estremo a" placeholder="a">,
+        <input type="text" id="b" aria-label="estremo b" placeholder="b">]</span>
+    </div>
+    <details class="aiuto">
+      <summary>Come scrivere le funzioni</summary>
+      <table>
+        <tr><td><code>3x^2 - 2x + 1</code></td><td>potenze con ^, il segno * si può omettere</td></tr>
+        <tr><td><code>e^(-x)</code></td><td>esponenziale (anche <code>exp(x)</code>)</td></tr>
+        <tr><td><code>ln(x)</code></td><td>logaritmo naturale; in base b: <code>log(x, b)</code></td></tr>
+        <tr><td><code>sen(x)</code> <code>cos(x)</code> <code>tg(x)</code></td><td>inverse: <code>arcsen</code>, <code>arccos</code>, <code>arctg</code></td></tr>
+        <tr><td><code>sqrt(x)</code> <code>cbrt(x)</code></td><td>radice quadrata e cubica; <code>x^(2/3)</code> vale anche per x &lt; 0</td></tr>
+        <tr><td><code>|x - 1|</code></td><td>valore assoluto</td></tr>
+        <tr><td><code>pi</code> <code>e</code></td><td>costanti; i decimali col punto: <code>0.5</code></td></tr>
+      </table>
+    </details>
+    <p id="errore" class="errore nascosto"></p>
+    <p id="attesa" class="attesa nascosto">Sto facendo i conti…</p>
+  </section>
+
+  <aside class="grafico-col">
+    <div class="grafico-fisso">
+      <div class="area-grafico">
+        <canvas class="grafico" id="grafico" aria-label="Grafico della funzione"></canvas>
+        <div class="coordinate"></div>
+        <div class="zoom">
+          <button type="button" id="zoom-piu" aria-label="Ingrandisci">+</button>
+          <button type="button" id="zoom-meno" aria-label="Rimpicciolisci">−</button>
+          <button type="button" id="zoom-reset" aria-label="Inquadra di nuovo">⟲</button>
+        </div>
+      </div>
+      <div class="mostra" id="mostra">
+        <label><input type="checkbox" data-k="f" checked><span class="campione" style="color:var(--penna)"></span>f</label>
+        <label><input type="checkbox" data-k="f1"><span class="campione tratt" style="color:var(--rosso)"></span>f′</label>
+        <label><input type="checkbox" data-k="f2"><span class="campione tratt" style="color:var(--matita-2)"></span>f″</label>
+        <label><input type="checkbox" data-k="asintoti" checked>asintoti</label>
+        <label><input type="checkbox" data-k="tangenti" checked>tangenti nei flessi</label>
+      </div>
+      <p class="legenda"><b>M</b> massimo, <b>m</b> minimo, <b class="v">F</b> flesso, P non derivabile; <span class="evid">giallo</span> = punto stazionario.
+        Trascina per spostarti, ctrl + rotella per lo zoom.</p>
+    </div>
+  </aside>
+
+  <main class="studio nascosto" id="studio">
+    <section class="passo">
+      <h2>Dominio</h2>
+      <div class="corpo" id="p-dominio"></div>
+    </section>
+    <section class="passo">
+      <h2>Derivata prima</h2>
+      <div class="corpo" id="p-f1"></div>
+    </section>
+    <section class="passo">
+      <h2>Punti stazionari</h2>
+      <div class="corpo" id="p-staz"></div>
+    </section>
+    <section class="passo">
+      <h2>Crescenza, decrescenza, massimi e minimi</h2>
+      <div class="corpo" id="p-mono"></div>
+    </section>
+    <section class="passo">
+      <h2>Derivata seconda</h2>
+      <div class="corpo" id="p-f2"></div>
+    </section>
+    <section class="passo">
+      <h2>Concavità e flessi</h2>
+      <div class="corpo" id="p-conc"></div>
+    </section>
+    <section class="passo">
+      <h2>Asintoti</h2>
+      <div class="corpo" id="p-asin"></div>
+    </section>
+    <div id="note"></div>
+  </main>
+</div>
+<script src="js/studio.js"></script>
+</body>
+</html>
