@@ -40,8 +40,8 @@ a { color: var(--penna); }
 
 /* ---------- foglio: margine rosso a sinistra, studio al centro, grafico a destra */
 .foglio {
-  max-width: 1320px; margin: 0 auto; padding: 28px 24px 96px 0;
-  display: grid; grid-template-columns: 72px minmax(0, 1fr) minmax(360px, 520px);
+  max-width: 1760px; margin: 0 auto; padding: 28px 24px 96px 0;
+  display: grid; grid-template-columns: 72px minmax(0, 1fr) minmax(360px, 1fr);
   grid-template-areas: "testa testa testa" ". funzione grafico" ". studio grafico";
   grid-template-rows: auto auto 1fr;
   column-gap: 32px;
@@ -173,7 +173,7 @@ p { margin: 6px 0; max-width: 72ch; }
 .grafico-fisso { position: sticky; top: 20px; }
 .area-grafico { position: relative; }
 canvas.grafico {
-  width: 100%; height: min(72vh, 560px); display: block; touch-action: none; cursor: grab;
+  width: 100%; height: max(360px, min(calc(100vh - 170px), 820px)); display: block; touch-action: none; cursor: grab;
   background: var(--carta); border: 1.5px solid var(--matita-2); border-radius: 2px;
 }
 @media (max-width: 1000px) { canvas.grafico { height: 380px; } .grafico-fisso { position: static; } .grafico-col { margin-top: 24px; } }
